@@ -4,6 +4,8 @@ import Search from "./components/Search.jsx";
 import Spinner from "./components/spinner.jsx";
 import MovieCard from "./components/MovieCard.jsx";
 import { updateSearchCount, ensureAnonymousSession, validateAppwriteEnv } from "./lib/appwrite.js";
+import hero from './assets/images/hero.png'
+
 
 
 
@@ -114,7 +116,12 @@ const App = () => {
       <div className="pattern" />
       <div className="wrapper">
         <header>
-          <img src="./hero.png" alt="Hero Banner" />
+
+        
+<img src={hero} alt="Hero Banner" />
+
+
+
           <h1>
             Find <span className="text-gradient">Movies</span> You&apos;ll Enjoy
             Without the Hassle
