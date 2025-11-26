@@ -4,7 +4,7 @@ import Search from "./components/Search.jsx";
 import Spinner from "./components/spinner.jsx";
 import MovieCard from "./components/MovieCard.jsx";
 import { updateSearchCount, ensureAnonymousSession, validateAppwriteEnv } from "./lib/appwrite.js";
-import hero from './assets/images/hero.png'
+import hero from './assets/image/hero.png'
 
 
 
