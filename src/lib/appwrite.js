@@ -1,15 +1,29 @@
 import { Client, Account, Databases, ID, Permission, Role, Query } from "appwrite";
 
-const client = new Client()
-    .setEndpoint(import.meta.env.VITE_APPWRITE_ENDPOINT)
-    .setProject(import.meta.env.VITE_APPWRITE_PROJECT_ID);
+// Read env vars once
+const APPWRITE_ENDPOINT = import.meta.env.VITE_APPWRITE_ENDPOINT;
+const APPWRITE_PROJECT_ID = import.meta.env.VITE_APPWRITE_PROJECT_ID;
 
-const account = new Account(client);
-const databases = new Databases(client);
+// Lazily initialize Appwrite client only when env vars are present.
+// This prevents runtime errors on GitHub Pages where these envs are not configured.
+let client = null;
+let account = null;
+let databases = null;
+
+if (APPWRITE_ENDPOINT && APPWRITE_PROJECT_ID) {
+  client = new Client().setEndpoint(APPWRITE_ENDPOINT).setProject(APPWRITE_PROJECT_ID);
+  account = new Account(client);
+  databases = new Databases(client);
+} else {
+  console.warn(
+    "Appwrite env vars are missing; Appwrite client will not be initialized. " +
+      "Search tracking and trending features depending on Appwrite are disabled."
+  );
+}
 
 export function validateAppwriteEnv() {
-  const endpoint = import.meta.env.VITE_APPWRITE_ENDPOINT;
-  const projectId = import.meta.env.VITE_APPWRITE_PROJECT_ID;
+  const endpoint = APPWRITE_ENDPOINT;
+  const projectId = APPWRITE_PROJECT_ID;
   const databaseId = import.meta.env.VITE_APPWRITE_DATABASE_ID;
   const collectionId = import.meta.env.VITE_APPWRITE_COLLECTION_ID;
 
@@ -27,6 +41,8 @@ export function validateAppwriteEnv() {
 }
 
 export async function ensureAnonymousSession() {
+  if (!account) return; // Appwrite not initialized
+
   try {
     await account.get();
     return; // already authenticated
@@ -43,6 +59,8 @@ export async function ensureAnonymousSession() {
 // Creates a document recording the search term and basic movie info
 // Requires env vars: VITE_APPWRITE_DATABASE_ID, VITE_APPWRITE_COLLECTION_ID
 export async function updateSearchCount(searchTerm, topMovie) {
+  if (!databases) return; // Appwrite not initialized
+
   const databaseId = import.meta.env.VITE_APPWRITE_DATABASE_ID;
   const collectionId = import.meta.env.VITE_APPWRITE_COLLECTION_ID;
 
@@ -79,6 +97,8 @@ export async function updateSearchCount(searchTerm, topMovie) {
 }
 
 export async function getTrendingMovies(limit = 10) {
+  if (!databases) return [];
+
   const databaseId = import.meta.env.VITE_APPWRITE_DATABASE_ID;
   const collectionId = import.meta.env.VITE_APPWRITE_COLLECTION_ID;
 
