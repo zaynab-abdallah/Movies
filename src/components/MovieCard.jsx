@@ -1,5 +1,5 @@
 import React from "react";
-import star from './assets/images/star.svg'
+import star from '../assets/image/star.svg'
 const MovieCard = ({ movie }) => {
     return (
         <div className="movie-card">
