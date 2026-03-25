@@ -97,7 +97,7 @@
 
     /* Trending movies list */
     & ul {
-      @apply flex flex-row overflow-y-auto gap-5 -mt-10 w-full hide-scrollbar;
+      @apply flex flex-row  gap-5 -mt-10 w-full hide-scrollbar;
       /* Horizontal flex layout, scrollable, gaps between items, full width, hidden scrollbar */
     }
 
